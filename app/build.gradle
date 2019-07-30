@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+
+//引用微信压缩资源库，白名单配置
+apply from: 'and-res-guard.gradle'
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "cn.wqgallery.myproguard"
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    //签名配置
+    signingConfigs {
+        debug {
+            storeFile file("D:\\studio  key\\studio  key\\GXY.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+        release {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('D:/studio  key/studio  key/GXY.keystore')
+            storePassword 'android'
+        }
+    }
+    //编译配置
+    buildTypes {
+        release {
+            minifyEnabled true     //混淆
+            buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
+            zipAlignEnabled true     //Zipalign优化
+            shrinkResources true    // 移除无用的resource文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+}
